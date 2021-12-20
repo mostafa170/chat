@@ -1,11 +1,13 @@
 package com.chat.home
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.lifecycleScope
 import com.apollographql.apollo3.ApolloClient
 import com.chat.R
 import com.chat.databinding.FragmentHomeBinding
@@ -29,16 +31,18 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 //        init()
         handleObserver()
+        val apolloClient = ApolloClient.Builder()
+            .serverUrl("https://solidsolutionsegypt.org/graphql")
+            .build()
+        lifecycleScope.launchWhenResumed {
+            val response = apolloClient.query(users()).execute()
+
+            Log.d("LaunchList", "Success ${response.data}")
+        }
     }
- fun handleObserver(){
+ fun handleObserver() {
      // Create a client
-     val apolloClient = ApolloClient.Builder()
-         .serverUrl("https://solidsolutionsegypt.org/graphql")
-         .build()
      // Execute your query. This will suspend until the response is received.
-//     val response = apolloClient.query(users(first = "10",page=1)).execute()
 
-//     println("Hero.name=${response.data?.users?.data?.get(0).name}")
  }
-
 }

@@ -1,0 +1,12 @@
+{
+    users(first: 10) {
+        data {
+            id
+            name
+        }
+        paginatorInfo {
+            currentPage
+            lastPage
+        }
+    }
+}
