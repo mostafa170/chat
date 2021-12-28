@@ -7,12 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.lifecycleScope
-import com.apollographql.apollo3.ApolloClient
 import com.chat.R
 import com.chat.databinding.FragmentHomeBinding
-
-// TODO: Rename parameter arguments, choose names that match
+import com.pusher.client.Pusher
+import com.pusher.client.PusherOptions
+import com.pusher.client.connection.ConnectionEventListener
+import com.pusher.client.connection.ConnectionState
+import com.pusher.client.connection.ConnectionStateChange
 
 class HomeFragment : Fragment() {
     lateinit var binding: FragmentHomeBinding
@@ -31,18 +32,37 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 //        init()
         handleObserver()
-        val apolloClient = ApolloClient.Builder()
-            .serverUrl("https://solidsolutionsegypt.org/graphql")
-            .build()
-        lifecycleScope.launchWhenResumed {
-            val response = apolloClient.query(users()).execute()
 
-            Log.d("LaunchList", "Success ${response.data}")
+    }
+
+    fun handleObserver() {
+        val options = PusherOptions()
+        options.setCluster("ap4")
+
+        val pusher = Pusher("cc31df9923d00ef5b9c9", options)
+
+        pusher.connect(object : ConnectionEventListener {
+            override fun onConnectionStateChange(change: ConnectionStateChange) {
+                Log.i(
+                    "Pusher", "State changed from ${change.previousState} to ${change.currentState}"
+                )
+            }
+
+            override fun onError(
+                message: String,
+                code: String,
+                e: Exception
+            ) {
+                Log.i(
+                    "Pusher",
+                    "There was a problem connecting! code ($code), " + "message ($message), exception($e)"
+                )
+            }
+        }, ConnectionState.ALL)
+
+        val channel = pusher.subscribe("chatify")
+        channel.bind("messaging") { event ->
+            Log.i("Pusher", "Received event with data: $event")
         }
     }
- fun handleObserver() {
-     // Create a client
-     // Execute your query. This will suspend until the response is received.
-
- }
 }

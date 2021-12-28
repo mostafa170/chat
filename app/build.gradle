@@ -1,7 +1,6 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id("com.apollographql.apollo3").version("3.0.0")
 }
 
 android {
@@ -16,9 +15,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-    apollo {
-         packageName.set("com.chat.rocketreserver")
-    }
+
 
     buildTypes {
         release {
@@ -69,8 +66,5 @@ dependencies {
     //picasso for images
     implementation 'com.squareup.picasso:picasso:2.71828'
 
-    implementation("com.apollographql.apollo3:apollo-runtime:3.0.0")
-
-//    compileOnly 'org.jetbrains:annotations:23.0.0'
-//    testCompileOnly 'org.jetbrains:annotations:23.0.0'
+    implementation 'com.pusher:pusher-java-client:2.2.7'
 }

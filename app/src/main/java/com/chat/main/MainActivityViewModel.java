@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.chat.main.model.searchPeople.SearchPeapleResponse;
+import com.chat.main.model.user.UserResponse;
 import com.chat.network.DevartlinkAPI;
 
 import retrofit2.Call;
@@ -17,12 +18,18 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     protected MutableLiveData<Integer> errorMessage;
     protected MutableLiveData<SearchPeapleResponse> peapleResponseMutableLiveData;
+    protected MutableLiveData<UserResponse> userResponseMutableLiveData;
 
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
 
         peapleResponseMutableLiveData = new MutableLiveData<>();
+        userResponseMutableLiveData = new MutableLiveData<>();
         errorMessage = new MutableLiveData<>();
+    }
+
+    public MutableLiveData<UserResponse> getUserResponseMutableLiveData() {
+        return userResponseMutableLiveData;
     }
 
     public MutableLiveData<Integer> getErrorMessage() {
@@ -45,6 +52,23 @@ public class MainActivityViewModel extends AndroidViewModel {
 
             @Override
             public void onFailure(Call<SearchPeapleResponse> call, Throwable t) {
+                errorMessage.postValue(1);
+            }
+        });
+    }
+    public void getUserModel(String u,String p,String fcm){
+        DevartlinkAPI.getApis().getModelUser(u,p,fcm).enqueue(new Callback<UserResponse>() {
+            @Override
+            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                if (response.isSuccessful()){
+                    userResponseMutableLiveData.postValue(response.body());
+                }else {
+                    userResponseMutableLiveData.postValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserResponse> call, Throwable t) {
                 errorMessage.postValue(1);
             }
         });

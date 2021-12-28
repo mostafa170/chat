@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
@@ -20,6 +21,8 @@ import com.chat.databinding.ActivityMainBinding;
 import com.chat.groups.GroupsFragment;
 import com.chat.home.HomeFragment;
 import com.chat.main.model.searchPeople.SearchPeapleResponse;
+import com.chat.main.model.user.UserResponse;
+import com.chat.utils.UserPreferenceHelper;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 
@@ -43,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
 
         viewModel.getpeapleSearchList();
+        viewModel.getUserModel("Mostafa Kamel K","Q2WXxk","sadsadasd");
         prepareTabsLayout();
         onClickListener();
     }
@@ -94,6 +98,13 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 });
+            }
+        });
+        viewModel.getUserResponseMutableLiveData().observe(this, new Observer<UserResponse>() {
+            @Override
+            public void onChanged(UserResponse userResponse) {
+                UserPreferenceHelper.saveUserProfile(userResponse);
+                Log.e("xxx",UserPreferenceHelper.getUser().getName());
             }
         });
     }
