@@ -1,6 +1,7 @@
 package com.chat.network;
 
 
+import com.chat.home.model.PeopleListResponse;
 import com.chat.main.model.searchPeople.SearchPeapleResponse;
 import com.chat.main.model.user.UserResponse;
 
@@ -13,10 +14,12 @@ public interface Api {
     Call<SearchPeapleResponse> getSearchPeaple();
 
     @GET("crm-chat")
-    Call<UserResponse> getModelUser(
-            @Query("u") String userName,
-            @Query("p") String password,
-            @Query("fcm") String fcm);
+    Call<UserResponse> getModelUser(@Query("u") String userName,
+                                    @Query("p") String password,
+                                    @Query("fcm") String fcm);
+
+    @GET("people_list")
+    Call<PeopleListResponse> getPeopleList(@Query("id") String id);
 
 
 }
