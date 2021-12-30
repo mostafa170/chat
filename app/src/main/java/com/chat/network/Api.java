@@ -32,6 +32,6 @@ public interface Api {
                                    @Query("user_id") String user_id);
 
     @GET("image")
-    Call<ImageProfileResponse> getImageProfile(@Query("user_id") String user_id);
+    Call<ImageProfileResponse> getImageProfile(@Query("id") String user_id);
 
 }

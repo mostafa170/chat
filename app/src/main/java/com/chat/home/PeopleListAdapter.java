@@ -1,6 +1,10 @@
 package com.chat.home;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Environment;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,14 +14,24 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.chat.R;
 import com.chat.databinding.ItemChatUserBinding;
 import com.chat.home.model.DataItem;
+import com.chat.home.model.ImageModel.ImageProfileResponse;
+import com.chat.network.DevartlinkAPI;
 import com.chat.utils.UserPreferenceHelper;
+
+import java.io.File;
+import java.io.FileOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PeopleListAdapter extends RecyclerView.Adapter<PeopleListAdapter.ViewHolder> {
 
@@ -44,22 +58,14 @@ public class PeopleListAdapter extends RecyclerView.Adapter<PeopleListAdapter.Vi
         if (dataItem.getDepartementsUserNameapi().getId().equals(UserPreferenceHelper.getUser().getId())) {
             viewHolder.binding.name.setText(dataItem.getUserapi().getName());
             viewHolder.binding.details.setText(dataItem.getUserapi().getHrmsJobEnName());
-            convertDateTime(dataItem.getCreatedAt(),viewHolder.binding.date,
+            convertDateTime(dataItem.getCreatedAt(), viewHolder.binding.date,
                     viewHolder.binding.time);
-
-//            byte[] decodedString = Base64.decode(x, Base64.DEFAULT);
-//            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-//            viewHolder.binding.profileImage.setImageBitmap(decodedByte);
 
         } else {
             viewHolder.binding.name.setText(dataItem.getDepartementsUserNameapi().getName());
             viewHolder.binding.details.setText(dataItem.getDepartementsUserNameapi().getHrmsJobEnName());
-            convertDateTime(dataItem.getCreatedAt(),viewHolder.binding.date,
+            convertDateTime(dataItem.getCreatedAt(), viewHolder.binding.date,
                     viewHolder.binding.time);
-
-//            byte[] decodedString = Base64.decode(x, Base64.DEFAULT);
-//            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-//            viewHolder.binding.profileImage.setImageBitmap(decodedByte);
 
         }
 
@@ -71,7 +77,44 @@ public class PeopleListAdapter extends RecyclerView.Adapter<PeopleListAdapter.Vi
                 }
             });
         }
+        DevartlinkAPI.getApis().getImageProfile(dataItem.getUserapi().getId())
+                .enqueue(new Callback<ImageProfileResponse>() {
+                    @Override
+                    public void onResponse(Call<ImageProfileResponse> call, Response<ImageProfileResponse> response) {
+                        if (response.isSuccessful()) {
+                                String base64String = response.body().getImg();
+                                String base64Image = base64String.split(",")[1];
+                                byte[] decodedString = Base64.decode(base64Image, Base64.DEFAULT);
+                                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                                viewHolder.binding.profileImage.setImageBitmap(decodedByte);
+                        }
+                    }
 
+                    @Override
+                    public void onFailure(Call<ImageProfileResponse> call, Throwable t) {
+                        //   errorMessage.postValue(1);
+                    }
+                });
+        DevartlinkAPI.getApis().getImageProfile(dataItem.getUserapi().getId())
+                .enqueue(new Callback<ImageProfileResponse>() {
+                    @Override
+                    public void onResponse(Call<ImageProfileResponse> call, Response<ImageProfileResponse> response) {
+                        if (response.isSuccessful()) {
+                            byte[] decodedString = Base64.decode(response.body()
+                                    .getImg(), Base64.DEFAULT);
+                            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0
+                                    , decodedString.length);
+                            viewHolder.binding.profileImage.setImageBitmap(decodedByte);
+                        } else {
+//                        imageProfileResponseMutableLiveData.postValue(response.body());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ImageProfileResponse> call, Throwable t) {
+                        //   errorMessage.postValue(1);
+                    }
+                });
     }
 
     @Override
@@ -115,7 +158,7 @@ public class PeopleListAdapter extends RecyclerView.Adapter<PeopleListAdapter.Vi
         void onItemClick(int pos, DataItem dataItem);
     }
 
-    public void convertDateTime(String format, TextView date,TextView time) {
+    public void convertDateTime(String format, TextView date, TextView time) {
         SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         SimpleDateFormat output = new SimpleDateFormat("dd/MM/yyyy");
         SimpleDateFormat outputTime = new SimpleDateFormat("HH:mm:ss");
@@ -128,7 +171,7 @@ public class PeopleListAdapter extends RecyclerView.Adapter<PeopleListAdapter.Vi
         }
         String formatted = output.format(d);
         String formatted1 = outputTime.format(d);
-        Log.i("DATE", "" + formatted+formatted1);
+        Log.i("DATE", "" + formatted + formatted1);
         date.setText(formatted);
         time.setText(formatted1);
     }

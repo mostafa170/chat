@@ -1,6 +1,9 @@
 package com.chat.ChatThread;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chat.ChatThread.model.DataItem;
 import com.chat.R;
+import com.chat.home.model.ImageModel.ImageProfileResponse;
+import com.chat.network.DevartlinkAPI;
 import com.chat.utils.UserPreferenceHelper;
 
 import java.text.ParseException;
@@ -19,6 +24,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHolder> {
 
@@ -65,6 +74,26 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
         convertDateTime(dataItem.getUpdatedAt(), viewHolder.time);
         if (!dataItem.getUserId().equals(UserPreferenceHelper.getUser().getId())){
             viewHolder.sender_name.setText(dataItem.getUserapi().getName());
+
+            DevartlinkAPI.getApis().getImageProfile(dataItem.getUserapi().getId())
+                    .enqueue(new Callback<ImageProfileResponse>() {
+                        @Override
+                        public void onResponse(Call<ImageProfileResponse> call, Response<ImageProfileResponse> response) {
+                            if (response.isSuccessful()) {
+                                String base64String = response.body().getImg();
+                                String base64Image = base64String.split(",")[1];
+                                byte[] decodedString = Base64.decode(base64Image, Base64.DEFAULT);
+                                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString
+                                        , 0, decodedString.length);
+                                viewHolder.img_sender.setImageBitmap(decodedByte);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ImageProfileResponse> call, Throwable t) {
+                            //   errorMessage.postValue(1);
+                        }
+                    });
         }
         if (dataItem.getUserId().equals(UserPreferenceHelper.getUser().getId())){
             if (dataItem.getSeen().equals("0")){
@@ -72,6 +101,26 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
             }else {
                 viewHolder.seen.setImageResource(R.drawable.seen);
             }
+
+            DevartlinkAPI.getApis().getImageProfile(dataItem.getUserapi().getId())
+                    .enqueue(new Callback<ImageProfileResponse>() {
+                        @Override
+                        public void onResponse(Call<ImageProfileResponse> call, Response<ImageProfileResponse> response) {
+                            if (response.isSuccessful()) {
+                                String base64String = response.body().getImg();
+                                String base64Image = base64String.split(",")[1];
+                                byte[] decodedString = Base64.decode(base64Image, Base64.DEFAULT);
+                                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString
+                                        , 0, decodedString.length);
+                                viewHolder.img_user.setImageBitmap(decodedByte);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ImageProfileResponse> call, Throwable t) {
+                            //   errorMessage.postValue(1);
+                        }
+                    });
         }
     }
 
