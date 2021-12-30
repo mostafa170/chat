@@ -8,20 +8,22 @@
         <entry key="..\:/work/DevartLab/chat/app/src/main/res/drawable/ic_attach_file.xml" value="0.25833333333333336" />
         <entry key="..\:/work/DevartLab/chat/app/src/main/res/drawable/ic_launcher_background.xml" value="0.25833333333333336" />
         <entry key="..\:/work/DevartLab/chat/app/src/main/res/drawable/ic_person.xml" value="0.25833333333333336" />
+        <entry key="..\:/work/DevartLab/chat/app/src/main/res/drawable/ic_seen.xml" value="0.20092592592592592" />
         <entry key="..\:/work/DevartLab/chat/app/src/main/res/drawable/message_incoming_bg.xml" value="0.25833333333333336" />
         <entry key="..\:/work/DevartLab/chat/app/src/main/res/drawable/message_outgoing_bg.xml" value="0.25833333333333336" />
+        <entry key="..\:/work/DevartLab/chat/app/src/main/res/drawable/seen.xml" value="0.1" />
         <entry key="..\:/work/DevartLab/chat/app/src/main/res/drawable/send_btn_bg.xml" value="0.25833333333333336" />
         <entry key="..\:/work/DevartLab/chat/app/src/main/res/drawable/tab_layout_selector_color.xml" value="0.25833333333333336" />
         <entry key="..\:/work/DevartLab/chat/app/src/main/res/layout/activity_chat_thread.xml" value="0.2421875" />
         <entry key="..\:/work/DevartLab/chat/app/src/main/res/layout/activity_main.xml" value="0.2421875" />
         <entry key="..\:/work/DevartLab/chat/app/src/main/res/layout/card_item_message_incoming.xml" value="0.2421875" />
-        <entry key="..\:/work/DevartLab/chat/app/src/main/res/layout/card_item_message_outgoing.xml" value="0.2421875" />
+        <entry key="..\:/work/DevartLab/chat/app/src/main/res/layout/card_item_message_outgoing.xml" value="0.25" />
         <entry key="..\:/work/DevartLab/chat/app/src/main/res/layout/fragment_blank.xml" value="0.1403985507246377" />
         <entry key="..\:/work/DevartLab/chat/app/src/main/res/layout/fragment_groups.xml" value="0.2421875" />
         <entry key="..\:/work/DevartLab/chat/app/src/main/res/layout/fragment_home.xml" value="0.2421875" />
         <entry key="..\:/work/DevartLab/chat/app/src/main/res/layout/fragment_home2.xml" value="0.1403985507246377" />
         <entry key="..\:/work/DevartLab/chat/app/src/main/res/layout/fragment_t_r.xml" value="0.2421875" />
-        <entry key="..\:/work/DevartLab/chat/app/src/main/res/layout/item_chat_user.xml" value="0.22" />
+        <entry key="..\:/work/DevartLab/chat/app/src/main/res/layout/item_chat_user.xml" value="0.33" />
       </map>
     </option>
   </component>

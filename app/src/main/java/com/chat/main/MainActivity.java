@@ -22,6 +22,7 @@ import com.chat.groups.GroupsFragment;
 import com.chat.home.HomeFragment;
 import com.chat.main.model.searchPeople.SearchPeapleResponse;
 import com.chat.main.model.user.UserResponse;
+import com.chat.main.model.userID.UserIDResponse;
 import com.chat.utils.UserPreferenceHelper;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
@@ -85,11 +86,10 @@ public class MainActivity extends AppCompatActivity {
                     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                         if (people.contains(String.valueOf(charSequence))) {
                             int index = people.indexOf(String.valueOf(charSequence));
-                            Intent intent= new Intent(MainActivity.this, ChatThreadActivity.class);
-                            intent.putExtra("peopleItem",searchPeapleResponse.getData().get(index));
-                            startActivity(intent);
+                            viewModel.getUserID(searchPeapleResponse.getData().get(index).getId());
                         } else {
-                            Toast.makeText(MainActivity.this, "please choose right name", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this
+                                    , "please choose right name", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -104,7 +104,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(UserResponse userResponse) {
                 UserPreferenceHelper.saveUserProfile(userResponse);
-                Log.e("xxx",UserPreferenceHelper.getUser().getName());
+            }
+        });
+        viewModel.getUserIDResponseMutableLiveData().observe(this, new Observer<UserIDResponse>() {
+            @Override
+            public void onChanged(UserIDResponse userIDResponse) {
+                Intent intent= new Intent(MainActivity.this, ChatThreadActivity.class);
+                intent.putExtra("peopleItem",userIDResponse.getId());
+                startActivity(intent);
             }
         });
     }

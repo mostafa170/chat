@@ -41,9 +41,9 @@ public class PeopleListAdapter extends RecyclerView.Adapter<PeopleListAdapter.Vi
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int position) {
         final DataItem dataItem = dataItems.get(position);
 
-        if (dataItem.getDepartementsUserName().getId().equals(UserPreferenceHelper.getUser().getId())) {
-            viewHolder.binding.name.setText(dataItem.getUser().getName());
-            viewHolder.binding.details.setText(dataItem.getUser().getHrmsJobEnName());
+        if (dataItem.getDepartementsUserNameapi().getId().equals(UserPreferenceHelper.getUser().getId())) {
+            viewHolder.binding.name.setText(dataItem.getUserapi().getName());
+            viewHolder.binding.details.setText(dataItem.getUserapi().getHrmsJobEnName());
             convertDateTime(dataItem.getCreatedAt(),viewHolder.binding.date,
                     viewHolder.binding.time);
 
@@ -52,8 +52,8 @@ public class PeopleListAdapter extends RecyclerView.Adapter<PeopleListAdapter.Vi
 //            viewHolder.binding.profileImage.setImageBitmap(decodedByte);
 
         } else {
-            viewHolder.binding.name.setText(dataItem.getDepartementsUserName().getName());
-            viewHolder.binding.details.setText(dataItem.getDepartementsUserName().getHrmsJobEnName());
+            viewHolder.binding.name.setText(dataItem.getDepartementsUserNameapi().getName());
+            viewHolder.binding.details.setText(dataItem.getDepartementsUserNameapi().getHrmsJobEnName());
             convertDateTime(dataItem.getCreatedAt(),viewHolder.binding.date,
                     viewHolder.binding.time);
 

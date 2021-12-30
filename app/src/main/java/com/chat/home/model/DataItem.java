@@ -5,20 +5,23 @@ import com.google.gson.annotations.SerializedName;
 
 public class DataItem{
 
+	@SerializedName("departements_user_nameapi")
+	private DepartementsUserNameapi departementsUserNameapi;
+
 	@SerializedName("updated_at")
 	private String updatedAt;
 
 	@SerializedName("user_id")
 	private String userId;
 
+	@SerializedName("userapi")
+	private Userapi userapi;
+
 	@SerializedName("unseenapi")
 	private List<Object> unseenapi;
 
 	@SerializedName("created_at")
 	private String createdAt;
-
-	@SerializedName("departements_user_name")
-	private DepartementsUserName departementsUserName;
 
 	@SerializedName("_id")
 	private String id;
@@ -29,9 +32,6 @@ public class DataItem{
 	@SerializedName("type")
 	private String type;
 
-	@SerializedName("user")
-	private User user;
-
 	@SerializedName("departements_user")
 	private String departementsUser;
 
@@ -40,6 +40,14 @@ public class DataItem{
 
 	@SerializedName("lastaction")
 	private int lastaction;
+
+	public void setDepartementsUserNameapi(DepartementsUserNameapi departementsUserNameapi){
+		this.departementsUserNameapi = departementsUserNameapi;
+	}
+
+	public DepartementsUserNameapi getDepartementsUserNameapi(){
+		return departementsUserNameapi;
+	}
 
 	public void setUpdatedAt(String updatedAt){
 		this.updatedAt = updatedAt;
@@ -57,6 +65,14 @@ public class DataItem{
 		return userId;
 	}
 
+	public void setUserapi(Userapi userapi){
+		this.userapi = userapi;
+	}
+
+	public Userapi getUserapi(){
+		return userapi;
+	}
+
 	public void setUnseenapi(List<Object> unseenapi){
 		this.unseenapi = unseenapi;
 	}
@@ -71,14 +87,6 @@ public class DataItem{
 
 	public String getCreatedAt(){
 		return createdAt;
-	}
-
-	public void setDepartementsUserName(DepartementsUserName departementsUserName){
-		this.departementsUserName = departementsUserName;
-	}
-
-	public DepartementsUserName getDepartementsUserName(){
-		return departementsUserName;
 	}
 
 	public void setId(String id){
@@ -103,14 +111,6 @@ public class DataItem{
 
 	public String getType(){
 		return type;
-	}
-
-	public void setUser(User user){
-		this.user = user;
-	}
-
-	public User getUser(){
-		return user;
 	}
 
 	public void setDepartementsUser(String departementsUser){
@@ -141,15 +141,15 @@ public class DataItem{
  	public String toString(){
 		return 
 			"DataItem{" + 
-			"updated_at = '" + updatedAt + '\'' + 
+			"departements_user_nameapi = '" + departementsUserNameapi + '\'' + 
+			",updated_at = '" + updatedAt + '\'' + 
 			",user_id = '" + userId + '\'' + 
+			",userapi = '" + userapi + '\'' + 
 			",unseenapi = '" + unseenapi + '\'' + 
 			",created_at = '" + createdAt + '\'' + 
-			",departements_user_name = '" + departementsUserName + '\'' + 
 			",_id = '" + id + '\'' + 
 			",title = '" + title + '\'' + 
 			",type = '" + type + '\'' + 
-			",user = '" + user + '\'' + 
 			",departements_user = '" + departementsUser + '\'' + 
 			",desc = '" + desc + '\'' + 
 			",lastaction = '" + lastaction + '\'' + 

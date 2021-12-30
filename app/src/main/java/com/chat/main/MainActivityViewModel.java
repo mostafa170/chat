@@ -8,7 +8,9 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.chat.main.model.searchPeople.SearchPeapleResponse;
 import com.chat.main.model.user.UserResponse;
+import com.chat.main.model.userID.UserIDResponse;
 import com.chat.network.DevartlinkAPI;
+import com.chat.utils.UserPreferenceHelper;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -19,12 +21,14 @@ public class MainActivityViewModel extends AndroidViewModel {
     protected MutableLiveData<Integer> errorMessage;
     protected MutableLiveData<SearchPeapleResponse> peapleResponseMutableLiveData;
     protected MutableLiveData<UserResponse> userResponseMutableLiveData;
+    protected MutableLiveData<UserIDResponse> userIDResponseMutableLiveData;
 
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
 
         peapleResponseMutableLiveData = new MutableLiveData<>();
         userResponseMutableLiveData = new MutableLiveData<>();
+        userIDResponseMutableLiveData = new MutableLiveData<>();
         errorMessage = new MutableLiveData<>();
     }
 
@@ -34,6 +38,10 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     public MutableLiveData<Integer> getErrorMessage() {
         return errorMessage;
+    }
+
+    public MutableLiveData<UserIDResponse> getUserIDResponseMutableLiveData() {
+        return userIDResponseMutableLiveData;
     }
 
     public MutableLiveData<SearchPeapleResponse> getPeapleResponseMutableLiveData() {
@@ -69,6 +77,24 @@ public class MainActivityViewModel extends AndroidViewModel {
 
             @Override
             public void onFailure(Call<UserResponse> call, Throwable t) {
+                errorMessage.postValue(1);
+            }
+        });
+    }
+    public void getUserID(String userID){
+        DevartlinkAPI.getApis().getUserID(UserPreferenceHelper.getUser()
+                .getId(),userID).enqueue(new Callback<UserIDResponse>() {
+            @Override
+            public void onResponse(Call<UserIDResponse> call, Response<UserIDResponse> response) {
+                if (response.isSuccessful()){
+                    userIDResponseMutableLiveData.postValue(response.body());
+                }else {
+                    userIDResponseMutableLiveData.postValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserIDResponse> call, Throwable t) {
                 errorMessage.postValue(1);
             }
         });

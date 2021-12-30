@@ -1,6 +1,6 @@
 package com.chat.home
 
-import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,17 +12,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.chat.R
 import com.chat.databinding.FragmentHomeBinding
-import com.chat.main.MainActivityViewModel
 import com.chat.utils.UserPreferenceHelper
 import com.pusher.client.Pusher
 import com.pusher.client.PusherOptions
 import com.pusher.client.connection.ConnectionEventListener
 import com.pusher.client.connection.ConnectionState
 import com.pusher.client.connection.ConnectionStateChange
-import androidx.annotation.NonNull
-import androidx.annotation.Nullable
 import androidx.lifecycle.Observer
-import com.chat.home.model.DataItem
+import com.chat.ChatThread.ChatThreadActivity
 
 
 class HomeFragment : Fragment() {
@@ -101,7 +98,9 @@ class HomeFragment : Fragment() {
                 adapter = PeopleListAdapter(it.data)
                 binding.recHomePeople.setAdapter(adapter)
                 adapter!!.setOnItemClickListener(PeopleListAdapter.OnItemClickListener { pos, dataItem ->
-
+                    val intent = Intent(requireContext(), ChatThreadActivity::class.java)
+                    intent.putExtra("people_id", dataItem.id)
+                    startActivity(intent)
                 })
             }
         })
