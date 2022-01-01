@@ -2,14 +2,23 @@ package com.chat.network;
 
 
 import com.chat.ChatThread.model.ChatListResponse;
+import com.chat.ChatThread.model.sendMessages.SendMessagesResponse;
 import com.chat.home.model.ImageModel.ImageProfileResponse;
 import com.chat.home.model.PeopleListResponse;
 import com.chat.main.model.searchPeople.SearchPeapleResponse;
 import com.chat.main.model.user.UserResponse;
 import com.chat.main.model.userID.UserIDResponse;
 
+import java.util.Map;
+
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
+import retrofit2.http.POST;
+import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 import retrofit2.http.Query;
 
 public interface Api {
@@ -33,5 +42,11 @@ public interface Api {
 
     @GET("image")
     Call<ImageProfileResponse> getImageProfile(@Query("id") String user_id);
+
+    @Multipart
+    @POST("captians/create")
+    Call<SendMessagesResponse> SEND_MESSAGES(@Part MultipartBody.Part file,
+                                             @PartMap Map<String, RequestBody> send);
+
 
 }
