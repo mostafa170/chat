@@ -8,6 +8,8 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.chat.ChatThread.model.ChatListResponse;
 import com.chat.ChatThread.model.sendMessages.SendMessagesResponse;
+import com.chat.home.model.mareSeen.MarkSeenRequest;
+import com.chat.home.model.mareSeen.MarkSeenResponse;
 import com.chat.network.DevartlinkAPI;
 
 import java.util.Map;
@@ -79,4 +81,5 @@ public class ChatListViewModel extends AndroidViewModel {
             }
         });
     }
+
 }

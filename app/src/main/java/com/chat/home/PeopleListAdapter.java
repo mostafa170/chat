@@ -3,7 +3,6 @@ package com.chat.home;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Environment;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,13 +16,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chat.R;
 import com.chat.databinding.ItemChatUserBinding;
-import com.chat.home.model.DataItem;
 import com.chat.home.model.ImageModel.ImageProfileResponse;
+import com.chat.home.model.peopleList.DataItem;
 import com.chat.network.DevartlinkAPI;
 import com.chat.utils.UserPreferenceHelper;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -82,11 +79,11 @@ public class PeopleListAdapter extends RecyclerView.Adapter<PeopleListAdapter.Vi
                     @Override
                     public void onResponse(Call<ImageProfileResponse> call, Response<ImageProfileResponse> response) {
                         if (response.isSuccessful()) {
-                                String base64String = response.body().getImg();
-                                String base64Image = base64String.split(",")[1];
-                                byte[] decodedString = Base64.decode(base64Image, Base64.DEFAULT);
-                                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                                viewHolder.binding.profileImage.setImageBitmap(decodedByte);
+                            String base64String = response.body().getImg();
+                            String base64Image = base64String.split(",")[1];
+                            byte[] decodedString = Base64.decode(base64Image, Base64.DEFAULT);
+                            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                            viewHolder.binding.profileImage.setImageBitmap(decodedByte);
                         }
                     }
 
@@ -115,6 +112,10 @@ public class PeopleListAdapter extends RecyclerView.Adapter<PeopleListAdapter.Vi
                         //   errorMessage.postValue(1);
                     }
                 });
+        if (dataItem.getUnseenapi().size()!=0){
+            viewHolder.binding.tvCountUnseed.setVisibility(View.VISIBLE);
+            viewHolder.binding.tvCountUnseed.setText(String.valueOf(dataItem.getUnseenapi().size()));
+        }
     }
 
     @Override

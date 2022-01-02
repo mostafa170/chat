@@ -32,6 +32,15 @@ import com.chat.databinding.ActivityChatThreadBinding;
 import com.chat.filesUpload.VolleyFileObj;
 import com.chat.main.model.searchPeople.PeopleItem;
 import com.chat.utils.UserPreferenceHelper;
+import com.pusher.client.Pusher;
+import com.pusher.client.PusherOptions;
+import com.pusher.client.channel.Channel;
+import com.pusher.client.channel.ChannelEventListener;
+import com.pusher.client.channel.PrivateChannel;
+import com.pusher.client.channel.PusherEvent;
+import com.pusher.client.connection.ConnectionEventListener;
+import com.pusher.client.connection.ConnectionState;
+import com.pusher.client.connection.ConnectionStateChange;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -50,6 +59,8 @@ public class ChatThreadActivity extends AppCompatActivity {
     ActivityChatThreadBinding binding;
     private ChatListViewModel viewModel;
     ChatListAdapter adapter;
+    Pusher pusher;
+    Channel channel;
     public static final int CAMERA_REQUEST = 2011;
     List<VolleyFileObj> volleyFileObjs = new ArrayList<>();
 
@@ -66,20 +77,57 @@ public class ChatThreadActivity extends AppCompatActivity {
             idUser = getIntent().getStringExtra("people_id");
             viewModel.getChatList(idUser);
         }
+        pusher();
         onClickListener();
     }
 
     private void init() {
         LayoutAnimationController animation = AnimationUtils
                 .loadLayoutAnimation(this, R.anim.layout_animation);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this
-                , LinearLayoutManager.VERTICAL, true);
-        layoutManager.setStackFromEnd(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setReverseLayout(true);
+        layoutManager.setStackFromEnd(false);
         binding.recyclerView.setLayoutManager(layoutManager);
         binding.recyclerView.setLayoutManager(layoutManager);
         binding.recyclerView.setLayoutAnimation(animation);
         adapter = new ChatListAdapter(null);
         binding.recyclerView.setAdapter(adapter);
+    }
+
+    private void pusher() {
+        PusherOptions options = new PusherOptions()
+                .setCluster("ap4");
+        pusher = new Pusher("cc31df9923d00ef5b9c9", options);
+        pusher.connect(new ConnectionEventListener() {
+            @Override
+            public void onConnectionStateChange(ConnectionStateChange change) {
+                Log.i("Pusher", "State changed from ${change.previousState} to ${change.currentState}");
+            }
+
+            @Override
+            public void onError(String message, String code, Exception e) {
+                Log.i("Pusher", "There was a problem connecting! code ($code), " + "message ($message), exception($e)");
+            }
+        }, ConnectionState.ALL);
+        channel = pusher.subscribe("chatify");
+        channel.bind("messaging", new ChannelEventListener() {
+            @Override
+            public void onSubscriptionSucceeded(String channelName) {
+
+            }
+
+            @Override
+            public void onEvent(PusherEvent event) {
+                Log.i("Pusher", "Received event with data: $event");
+                if (getIntent().hasExtra("peopleItem")) {
+                    peopleItem = getIntent().getStringExtra("peopleItem");
+                    viewModel.getChatList(peopleItem);
+                } else if (getIntent().hasExtra("people_id")) {
+                    idUser = getIntent().getStringExtra("people_id");
+                    viewModel.getChatList(idUser);
+                }
+            }
+        });
     }
 
     private void onClickListener() {
@@ -92,9 +140,9 @@ public class ChatThreadActivity extends AppCompatActivity {
         binding.send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (TextUtils.isEmpty(binding.message.getText().toString())){
+                if (TextUtils.isEmpty(binding.message.getText().toString())) {
                     binding.message.setError("please enter message");
-                }else {
+                } else {
                     submit();
                 }
             }
@@ -220,10 +268,10 @@ public class ChatThreadActivity extends AppCompatActivity {
             map.put("id", userId);
             Log.e("user_id", peopleItem);
         }
-        if (volleyFileObjs.size()==0){
-            MultipartBody.Part part=null;
+        if (volleyFileObjs.size() == 0) {
+            MultipartBody.Part part = null;
             viewModel.sendMessages(part, map);
-        }else {
+        } else {
             RequestBody sendMGSReqBody = RequestBody.create(volleyFileObjs.get(0).getFile()
                     , MediaType.parse("image/*"));
             MultipartBody.Part part = MultipartBody.Part

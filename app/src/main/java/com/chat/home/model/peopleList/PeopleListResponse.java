@@ -1,4 +1,4 @@
-package com.chat.home.model;
+package com.chat.home.model.peopleList;
 
 import java.util.List;
 import com.google.gson.annotations.SerializedName;

@@ -6,6 +6,7 @@
         <entry key="..\:/work/DevartLab/chat/app/src/main/res/drawable-v24/custom_bg_btn_color_light_bluelevel_one.xml" value="0.25833333333333336" />
         <entry key="..\:/work/DevartLab/chat/app/src/main/res/drawable/custom_bg_btn_color_light_bluelevel_one.xml" value="0.25833333333333336" />
         <entry key="..\:/work/DevartLab/chat/app/src/main/res/drawable/ic_attach_file.xml" value="0.25833333333333336" />
+        <entry key="..\:/work/DevartLab/chat/app/src/main/res/drawable/ic_circle.xml" value="0.20833333333333334" />
         <entry key="..\:/work/DevartLab/chat/app/src/main/res/drawable/ic_launcher_background.xml" value="0.25833333333333336" />
         <entry key="..\:/work/DevartLab/chat/app/src/main/res/drawable/ic_person.xml" value="0.25833333333333336" />
         <entry key="..\:/work/DevartLab/chat/app/src/main/res/drawable/ic_seen.xml" value="0.20092592592592592" />
@@ -25,7 +26,7 @@
         <entry key="..\:/work/DevartLab/chat/app/src/main/res/layout/fragment_home.xml" value="0.2421875" />
         <entry key="..\:/work/DevartLab/chat/app/src/main/res/layout/fragment_home2.xml" value="0.1403985507246377" />
         <entry key="..\:/work/DevartLab/chat/app/src/main/res/layout/fragment_t_r.xml" value="0.2421875" />
-        <entry key="..\:/work/DevartLab/chat/app/src/main/res/layout/item_chat_user.xml" value="0.33" />
+        <entry key="..\:/work/DevartLab/chat/app/src/main/res/layout/item_chat_user.xml" value="0.5" />
       </map>
     </option>
   </component>

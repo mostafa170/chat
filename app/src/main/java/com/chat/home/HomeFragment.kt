@@ -20,12 +20,14 @@ import com.pusher.client.connection.ConnectionState
 import com.pusher.client.connection.ConnectionStateChange
 import androidx.lifecycle.Observer
 import com.chat.ChatThread.ChatThreadActivity
+import com.chat.home.model.mareSeen.MarkSeenRequest
 
 
 class HomeFragment : Fragment() {
     lateinit var binding: FragmentHomeBinding
     var viewModel: HomeViewModel? = null
     private var adapter: PeopleListAdapter? = null
+    lateinit var markSeenRequest:MarkSeenRequest
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -77,7 +79,8 @@ class HomeFragment : Fragment() {
 
         val channel = pusher.subscribe("chatify")
         channel.bind("messaging") { event ->
-            Log.i("Pusher", "Received event with data: $event")
+                Log.i("Pusher", "Received event with data: $event")
+            viewModel!!.getListPeaple(UserPreferenceHelper.getUser().id)
         }
         viewModel!!.getErrorMessage().observe(getViewLifecycleOwner(), { integer: Int ->
             if (integer == 1) {
@@ -98,6 +101,14 @@ class HomeFragment : Fragment() {
                 adapter = PeopleListAdapter(it.data)
                 binding.recHomePeople.setAdapter(adapter)
                 adapter!!.setOnItemClickListener(PeopleListAdapter.OnItemClickListener { pos, dataItem ->
+                    channel.bind("client-seen") { event ->
+                        Log.i("Pusher", "Received event with data: $event")
+                    }
+                    markSeenRequest= MarkSeenRequest()
+                    markSeenRequest.id=dataItem.id
+                    markSeenRequest.toId=dataItem.id
+                    markSeenRequest.userId=UserPreferenceHelper.getUser().id
+                    viewModel!!.markSeen(markSeenRequest)
                     val intent = Intent(requireContext(), ChatThreadActivity::class.java)
                     intent.putExtra("people_id", dataItem.id)
                     startActivity(intent)
@@ -108,11 +119,13 @@ class HomeFragment : Fragment() {
             refresh()
         }
     }
-    private fun refresh(){
+
+    private fun refresh() {
         synchronized(this) {
             viewModel!!.getListPeaple(UserPreferenceHelper.getUser().id)
             binding.swipeRefreshLayout.isRefreshing = false
             binding.progressBar.setVisibility(View.VISIBLE)
         }
     }
+
 }

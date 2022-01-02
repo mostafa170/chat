@@ -7,7 +7,9 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.chat.home.model.ImageModel.ImageProfileResponse;
-import com.chat.home.model.PeopleListResponse;
+import com.chat.home.model.mareSeen.MarkSeenRequest;
+import com.chat.home.model.mareSeen.MarkSeenResponse;
+import com.chat.home.model.peopleList.PeopleListResponse;
 import com.chat.network.DevartlinkAPI;
 
 import retrofit2.Call;
@@ -19,6 +21,7 @@ public class HomeViewModel extends AndroidViewModel {
     protected MutableLiveData<Integer> errorMessage;
     protected MutableLiveData<PeopleListResponse> peapleResponseMutableLiveData;
     protected MutableLiveData<ImageProfileResponse> imageProfileResponseMutableLiveData;
+    protected MutableLiveData<MarkSeenResponse> markSeenRequestMutableLiveData;
 
     public HomeViewModel(@NonNull Application application) {
         super(application);
@@ -26,11 +29,16 @@ public class HomeViewModel extends AndroidViewModel {
         peapleResponseMutableLiveData = new MutableLiveData<>();
         peapleResponseMutableLiveData = new MutableLiveData<>();
         imageProfileResponseMutableLiveData = new MutableLiveData<>();
+        markSeenRequestMutableLiveData = new MutableLiveData<>();
         errorMessage = new MutableLiveData<>();
     }
 
     public MutableLiveData<ImageProfileResponse> getImageProfileResponseMutableLiveData() {
         return imageProfileResponseMutableLiveData;
+    }
+
+    public MutableLiveData<MarkSeenResponse> getMarkSeenRequestMutableLiveData() {
+        return markSeenRequestMutableLiveData;
     }
 
     public MutableLiveData<Integer> getErrorMessage() {
@@ -75,4 +83,22 @@ public class HomeViewModel extends AndroidViewModel {
             }
         });
     }
+    public void markSeen(MarkSeenRequest markSeenRequest){
+        DevartlinkAPI.getApis().MARK_SEEN(markSeenRequest).enqueue(new Callback<MarkSeenResponse>() {
+            @Override
+            public void onResponse(Call<MarkSeenResponse> call, Response<MarkSeenResponse> response) {
+                if (response.isSuccessful()){
+                    markSeenRequestMutableLiveData.postValue(response.body());
+                }else {
+                    markSeenRequestMutableLiveData.postValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MarkSeenResponse> call, Throwable t) {
+                errorMessage.postValue(1);
+            }
+        });
+    }
+
 }

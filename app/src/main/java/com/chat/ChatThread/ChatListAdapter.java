@@ -20,6 +20,14 @@ import com.chat.R;
 import com.chat.home.model.ImageModel.ImageProfileResponse;
 import com.chat.network.DevartlinkAPI;
 import com.chat.utils.UserPreferenceHelper;
+import com.pusher.client.Pusher;
+import com.pusher.client.PusherOptions;
+import com.pusher.client.channel.Channel;
+import com.pusher.client.channel.ChannelEventListener;
+import com.pusher.client.channel.PusherEvent;
+import com.pusher.client.connection.ConnectionEventListener;
+import com.pusher.client.connection.ConnectionState;
+import com.pusher.client.connection.ConnectionStateChange;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,6 +46,8 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
 
     List<DataItem> messages;
     private Context context;
+    Pusher pusher;
+    Channel channel;
 
     public ChatListAdapter(List<DataItem> messages) {
         this.messages = messages;
@@ -45,20 +55,20 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
 
     private final static int INCOMING = 1;
     private final static int OUTGOING = 2;
-    private final static int OUTGOINGIMG=3;
-    private final static int INGOINGIMG=4;
+    private final static int OUTGOINGIMG = 3;
+    private final static int INGOINGIMG = 4;
 
     @Override
     public int getItemViewType(int position) {
         DataItem message = messages.get(position);
-        if(message.getUserId().equals(UserPreferenceHelper.getUser().getId())){
-            if (message.getAttachment() != null){
+        if (message.getUserId().equals(UserPreferenceHelper.getUser().getId())) {
+            if (message.getAttachment() != null) {
                 return OUTGOINGIMG;
-            }else {
+            } else {
                 return OUTGOING;
             }
-        }else if (!message.getUserId().equals(UserPreferenceHelper.getUser().getId())){
-            if (message.getAttachment() != null){
+        } else if (!message.getUserId().equals(UserPreferenceHelper.getUser().getId())) {
+            if (message.getAttachment() != null) {
                 return INGOINGIMG;
             }
         }
@@ -69,20 +79,20 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = null;
-        if(viewType==INCOMING){
-            view=LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.card_item_message_incoming,parent,false);
-        }else if(viewType==OUTGOING){
-            view=LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.card_item_message_outgoing,parent,false);
+        if (viewType == INCOMING) {
+            view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.card_item_message_incoming, parent, false);
+        } else if (viewType == OUTGOING) {
+            view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.card_item_message_outgoing, parent, false);
 
-        }else if(viewType==OUTGOINGIMG){
-            view=LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.card_item_message_outgoing_img,parent,false);
+        } else if (viewType == OUTGOINGIMG) {
+            view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.card_item_message_outgoing_img, parent, false);
 
-        }else if(viewType==INGOINGIMG){
-            view=LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.card_item_message_incoming_img,parent,false);
+        } else if (viewType == INGOINGIMG) {
+            view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.card_item_message_incoming_img, parent, false);
 
         }
         context = parent.getContext();
@@ -95,21 +105,21 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
 
         viewHolder.content.setText(dataItem.getMessage());
         convertDateTime(dataItem.getUpdatedAt(), viewHolder.time);
-        if (dataItem.getAttachment()!=null){
+        if (dataItem.getAttachment() != null) {
             String result = dataItem.getAttachment();
             JSONObject jObject = null;
             try {
                 jObject = new JSONObject(result);
                 String aJsonString = jObject.getString("new_name");
                 Glide.with(context)
-                        .load("https://devartlink.devartlab.com/storage/attachments/"+
+                        .load("https://devartlink.devartlab.com/storage/attachments/" +
                                 aJsonString)
                         .into(viewHolder.attachment);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        if (!dataItem.getUserId().equals(UserPreferenceHelper.getUser().getId())){
+        if (!dataItem.getUserId().equals(UserPreferenceHelper.getUser().getId())) {
             viewHolder.sender_name.setText(dataItem.getUserapi().getName());
 
             DevartlinkAPI.getApis().getImageProfile(dataItem.getUserapi().getId())
@@ -132,10 +142,10 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
                         }
                     });
         }
-        if (dataItem.getUserId().equals(UserPreferenceHelper.getUser().getId())){
-            if (dataItem.getSeen().equals("0")){
+        if (dataItem.getUserId().equals(UserPreferenceHelper.getUser().getId())) {
+            if (dataItem.getSeen().equals("0")) {
                 viewHolder.seen.setImageResource(R.drawable.unseen);
-            }else {
+            } else {
                 viewHolder.seen.setImageResource(R.drawable.seen);
             }
 
@@ -158,7 +168,9 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
                             //   errorMessage.postValue(1);
                         }
                     });
+
         }
+
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.chat.home.model;
+package com.chat.home.model.peopleList;
 
 import java.util.List;
 import com.google.gson.annotations.SerializedName;
@@ -18,7 +18,7 @@ public class DataItem{
 	private Userapi userapi;
 
 	@SerializedName("unseenapi")
-	private List<Object> unseenapi;
+	private List<UnseenapiItem> unseenapi;
 
 	@SerializedName("created_at")
 	private String createdAt;
@@ -73,11 +73,11 @@ public class DataItem{
 		return userapi;
 	}
 
-	public void setUnseenapi(List<Object> unseenapi){
+	public void setUnseenapi(List<UnseenapiItem> unseenapi){
 		this.unseenapi = unseenapi;
 	}
 
-	public List<Object> getUnseenapi(){
+	public List<UnseenapiItem> getUnseenapi(){
 		return unseenapi;
 	}
 
