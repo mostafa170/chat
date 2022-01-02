@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +14,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.chat.ChatThread.model.DataItem;
 import com.chat.R;
 import com.chat.home.model.ImageModel.ImageProfileResponse;
 import com.chat.network.DevartlinkAPI;
 import com.chat.utils.UserPreferenceHelper;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -40,26 +45,44 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
 
     private final static int INCOMING = 1;
     private final static int OUTGOING = 2;
+    private final static int OUTGOINGIMG=3;
+    private final static int INGOINGIMG=4;
 
     @Override
     public int getItemViewType(int position) {
         DataItem message = messages.get(position);
-        if (message.getUserId().equals(UserPreferenceHelper.getUser().getId()))
-            return OUTGOING;
+        if(message.getUserId().equals(UserPreferenceHelper.getUser().getId())){
+            if (message.getAttachment() != null){
+                return OUTGOINGIMG;
+            }else {
+                return OUTGOING;
+            }
+        }else if (!message.getUserId().equals(UserPreferenceHelper.getUser().getId())){
+            if (message.getAttachment() != null){
+                return INGOINGIMG;
+            }
+        }
         return INCOMING;
-
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = null;
-        if (viewType == INCOMING) {
-            view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.card_item_message_incoming, parent, false);
-        } else if (viewType == OUTGOING) {
-            view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.card_item_message_outgoing, parent, false);
+        if(viewType==INCOMING){
+            view=LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.card_item_message_incoming,parent,false);
+        }else if(viewType==OUTGOING){
+            view=LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.card_item_message_outgoing,parent,false);
+
+        }else if(viewType==OUTGOINGIMG){
+            view=LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.card_item_message_outgoing_img,parent,false);
+
+        }else if(viewType==INGOINGIMG){
+            view=LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.card_item_message_incoming_img,parent,false);
 
         }
         context = parent.getContext();
@@ -72,6 +95,20 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
 
         viewHolder.content.setText(dataItem.getMessage());
         convertDateTime(dataItem.getUpdatedAt(), viewHolder.time);
+        if (dataItem.getAttachment()!=null){
+            String result = dataItem.getAttachment();
+            JSONObject jObject = null;
+            try {
+                jObject = new JSONObject(result);
+                String aJsonString = jObject.getString("new_name");
+                Glide.with(context)
+                        .load("https://devartlink.devartlab.com/storage/attachments/"+
+                                aJsonString)
+                        .into(viewHolder.attachment);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
         if (!dataItem.getUserId().equals(UserPreferenceHelper.getUser().getId())){
             viewHolder.sender_name.setText(dataItem.getUserapi().getName());
 
@@ -124,7 +161,6 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
         }
     }
 
-
     @Override
     public int getItemCount() {
         if (messages == null)
@@ -140,6 +176,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
         public ImageView img_user;
         public ImageView img_sender;
         public ImageView seen;
+        public ImageView attachment;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -149,6 +186,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
             img_user = itemView.findViewById(R.id.img_user);
             img_sender = itemView.findViewById(R.id.img_sender);
             seen = itemView.findViewById(R.id.seen);
+            attachment = itemView.findViewById(R.id.imgMsg);
         }
     }
 

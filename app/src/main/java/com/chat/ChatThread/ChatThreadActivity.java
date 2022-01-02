@@ -18,6 +18,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -52,7 +53,6 @@ public class ChatThreadActivity extends AppCompatActivity {
     public static final int CAMERA_REQUEST = 2011;
     List<VolleyFileObj> volleyFileObjs = new ArrayList<>();
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,11 +62,9 @@ public class ChatThreadActivity extends AppCompatActivity {
         if (getIntent().hasExtra("peopleItem")) {
             peopleItem = getIntent().getStringExtra("peopleItem");
             viewModel.getChatList(peopleItem);
-            Log.e("peopleItem", peopleItem);
         } else if (getIntent().hasExtra("people_id")) {
             idUser = getIntent().getStringExtra("people_id");
             viewModel.getChatList(idUser);
-            Log.e("people_id", idUser);
         }
         onClickListener();
     }
@@ -94,8 +92,11 @@ public class ChatThreadActivity extends AppCompatActivity {
         binding.send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              Log.e("xxx",volleyFileObjs.get(0).getFile().getName())  ;
-                submit();
+                if (TextUtils.isEmpty(binding.message.getText().toString())){
+                    binding.message.setError("please enter message");
+                }else {
+                    submit();
+                }
             }
         });
         viewModel.getErrorMessage().observe(this, integer -> {
@@ -111,13 +112,14 @@ public class ChatThreadActivity extends AppCompatActivity {
                 binding.progressBar.setVisibility(View.GONE);
                 adapter = new ChatListAdapter(chatListResponse.getData());
                 binding.recyclerView.setAdapter(adapter);
-
             }
         });
         viewModel.getSendMessagesResponseMutableLiveData().observe(this, new Observer<SendMessagesResponse>() {
             @Override
             public void onChanged(SendMessagesResponse sendMessagesResponse) {
-
+                binding.message.setText("");
+                binding.sendIMG.setImageResource(R.drawable.ic_attach_file);
+                volleyFileObjs.clear();
             }
         });
     }
@@ -177,7 +179,6 @@ public class ChatThreadActivity extends AppCompatActivity {
         }
     }
 
-
     public Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
@@ -207,24 +208,29 @@ public class ChatThreadActivity extends AppCompatActivity {
         Log.e("message", binding.message.getText().toString());
 
         RequestBody id = RequestBody.create(MediaType.parse("multipart/form-data"), UserPreferenceHelper.getUser().getId());
-        map.put("id", id);
-        Log.e("id", UserPreferenceHelper.getUser().getId());
+        map.put("user_id", id);
+        Log.e("idxxx", UserPreferenceHelper.getUser().getId());
 
         if (idUser != null) {
             RequestBody userId = RequestBody.create(MediaType.parse("multipart/form-data"), idUser);
-            map.put("user_id", userId);
-            Log.e("user_id", idUser);
+            map.put("id", userId);
+            Log.e("user_idxxxx", idUser);
         } else if (peopleItem != null) {
             RequestBody userId = RequestBody.create(MediaType.parse("multipart/form-data"), peopleItem);
-            map.put("user_id", userId);
+            map.put("id", userId);
             Log.e("user_id", peopleItem);
         }
-        RequestBody sendMGSReqBody = RequestBody.create(volleyFileObjs.get(0).getFile()
-                , MediaType.parse("image/*"));
-        MultipartBody.Part part = MultipartBody.Part
-                .createFormData(volleyFileObjs.get(0).getParamName(),
-                        volleyFileObjs.get(0).getFile().getName()
-                        , sendMGSReqBody);
-        viewModel.sendMessages(part, map);
+        if (volleyFileObjs.size()==0){
+            MultipartBody.Part part=null;
+            viewModel.sendMessages(part, map);
+        }else {
+            RequestBody sendMGSReqBody = RequestBody.create(volleyFileObjs.get(0).getFile()
+                    , MediaType.parse("image/*"));
+            MultipartBody.Part part = MultipartBody.Part
+                    .createFormData(volleyFileObjs.get(0).getParamName(),
+                            volleyFileObjs.get(0).getFile().getName()
+                            , sendMGSReqBody);
+            viewModel.sendMessages(part, map);
+        }
     }
 }

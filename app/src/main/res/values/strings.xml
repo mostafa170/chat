@@ -10,4 +10,5 @@
     <string name="labal_from_library_imgs">From library images</string>
     <string name="labal_cancel">Cancel</string>
     <string name="labal_choose_method_img">Choose the image selection method</string>
+    <string name="type_a_message">Type a message</string>
 </resources>

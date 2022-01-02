@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 public class DataItem{
 
 	@SerializedName("attachment")
-	private Object attachment;
+	private String attachment;
 
 	@SerializedName("reply_id")
 	private String replyId;
@@ -37,11 +37,11 @@ public class DataItem{
 	@SerializedName("seen")
 	private String seen;
 
-	public void setAttachment(Object attachment){
+	public void setAttachment(String attachment){
 		this.attachment = attachment;
 	}
 
-	public Object getAttachment(){
+	public String getAttachment(){
 		return attachment;
 	}
 

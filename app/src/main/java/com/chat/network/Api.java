@@ -44,7 +44,7 @@ public interface Api {
     Call<ImageProfileResponse> getImageProfile(@Query("id") String user_id);
 
     @Multipart
-    @POST("captians/create")
+    @POST("sendmessage")
     Call<SendMessagesResponse> SEND_MESSAGES(@Part MultipartBody.Part file,
                                              @PartMap Map<String, RequestBody> send);
 
