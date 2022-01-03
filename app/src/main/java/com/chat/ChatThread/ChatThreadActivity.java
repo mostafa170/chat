@@ -116,6 +116,7 @@ public class ChatThreadActivity extends AppCompatActivity {
 
             }
 
+
             @Override
             public void onEvent(PusherEvent event) {
                 Log.i("Pusher", "Received event with data: $event");
@@ -126,6 +127,16 @@ public class ChatThreadActivity extends AppCompatActivity {
                     idUser = getIntent().getStringExtra("people_id");
                     viewModel.getChatList(idUser);
                 }
+            }
+        });
+        channel.bind("client-delete-message", event -> {
+            Log.i("Pusher", "Received event with data: $event");
+            if (getIntent().hasExtra("peopleItem")) {
+                peopleItem = getIntent().getStringExtra("peopleItem");
+                viewModel.getChatList(peopleItem);
+            } else if (getIntent().hasExtra("people_id")) {
+                idUser = getIntent().getStringExtra("people_id");
+                viewModel.getChatList(idUser);
             }
         });
     }

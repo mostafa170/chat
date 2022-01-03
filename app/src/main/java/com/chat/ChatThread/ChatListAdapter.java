@@ -9,9 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -170,7 +172,10 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
                     });
 
         }
-
+        if (dataItem.isIs_deleted()){
+            viewHolder.linear_deleted.setVisibility(View.VISIBLE);
+            viewHolder.conlay_message.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -189,6 +194,8 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
         public ImageView img_sender;
         public ImageView seen;
         public ImageView attachment;
+        public LinearLayout linear_deleted;
+        public ConstraintLayout conlay_message;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -199,6 +206,8 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
             img_sender = itemView.findViewById(R.id.img_sender);
             seen = itemView.findViewById(R.id.seen);
             attachment = itemView.findViewById(R.id.imgMsg);
+            linear_deleted=itemView.findViewById(R.id.linear_deleted);
+            conlay_message=itemView.findViewById(R.id.conlay_message);
         }
     }
 

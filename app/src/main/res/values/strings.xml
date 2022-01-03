@@ -11,4 +11,5 @@
     <string name="labal_cancel">Cancel</string>
     <string name="labal_choose_method_img">Choose the image selection method</string>
     <string name="type_a_message">Type a message</string>
+    <string name="deleted">deleted</string>
 </resources>

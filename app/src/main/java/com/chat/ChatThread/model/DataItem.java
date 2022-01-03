@@ -2,144 +2,156 @@ package com.chat.ChatThread.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class DataItem{
+public class DataItem {
 
-	@SerializedName("attachment")
-	private String attachment;
+    @SerializedName("attachment")
+    private String attachment;
 
-	@SerializedName("reply_id")
-	private String replyId;
+    @SerializedName("reply_id")
+    private String replyId;
 
-	@SerializedName("updated_at")
-	private String updatedAt;
+    @SerializedName("updated_at")
+    private String updatedAt;
 
-	@SerializedName("user_id")
-	private String userId;
+    @SerializedName("user_id")
+    private String userId;
 
-	@SerializedName("userapi")
-	private Userapi userapi;
+    @SerializedName("userapi")
+    private Userapi userapi;
 
-	@SerializedName("conversation_id")
-	private String conversationId;
+    @SerializedName("conversation_id")
+    private String conversationId;
 
-	@SerializedName("created_at")
-	private String createdAt;
+    @SerializedName("created_at")
+    private String createdAt;
 
-	@SerializedName("_id")
-	private String id;
+    @SerializedName("_id")
+    private String id;
 
-	@SerializedName("type")
-	private String type;
+    @SerializedName("type")
+    private String type;
 
-	@SerializedName("message")
-	private String message;
+    @SerializedName("message")
+    private String message;
 
-	@SerializedName("seen")
-	private String seen;
+    @SerializedName("seen")
+    private String seen;
 
-	public void setAttachment(String attachment){
-		this.attachment = attachment;
-	}
+    @SerializedName("is_deleted")
+    private boolean is_deleted;
 
-	public String getAttachment(){
-		return attachment;
-	}
+    public boolean isIs_deleted() {
+        return is_deleted;
+    }
 
-	public void setReplyId(String replyId){
-		this.replyId = replyId;
-	}
+    public void setIs_deleted(boolean is_deleted) {
+        this.is_deleted = is_deleted;
+    }
 
-	public String getReplyId(){
-		return replyId;
-	}
+    public void setAttachment(String attachment) {
+        this.attachment = attachment;
+    }
 
-	public void setUpdatedAt(String updatedAt){
-		this.updatedAt = updatedAt;
-	}
+    public String getAttachment() {
+        return attachment;
+    }
 
-	public String getUpdatedAt(){
-		return updatedAt;
-	}
+    public void setReplyId(String replyId) {
+        this.replyId = replyId;
+    }
 
-	public void setUserId(String userId){
-		this.userId = userId;
-	}
+    public String getReplyId() {
+        return replyId;
+    }
 
-	public String getUserId(){
-		return userId;
-	}
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 
-	public void setUserapi(Userapi userapi){
-		this.userapi = userapi;
-	}
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
 
-	public Userapi getUserapi(){
-		return userapi;
-	}
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
-	public void setConversationId(String conversationId){
-		this.conversationId = conversationId;
-	}
+    public String getUserId() {
+        return userId;
+    }
 
-	public String getConversationId(){
-		return conversationId;
-	}
+    public void setUserapi(Userapi userapi) {
+        this.userapi = userapi;
+    }
 
-	public void setCreatedAt(String createdAt){
-		this.createdAt = createdAt;
-	}
+    public Userapi getUserapi() {
+        return userapi;
+    }
 
-	public String getCreatedAt(){
-		return createdAt;
-	}
+    public void setConversationId(String conversationId) {
+        this.conversationId = conversationId;
+    }
 
-	public void setId(String id){
-		this.id = id;
-	}
+    public String getConversationId() {
+        return conversationId;
+    }
 
-	public String getId(){
-		return id;
-	}
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
 
-	public void setType(String type){
-		this.type = type;
-	}
+    public String getCreatedAt() {
+        return createdAt;
+    }
 
-	public String getType(){
-		return type;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public void setMessage(String message){
-		this.message = message;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public String getMessage(){
-		return message;
-	}
+    public void setType(String type) {
+        this.type = type;
+    }
 
-	public void setSeen(String seen){
-		this.seen = seen;
-	}
+    public String getType() {
+        return type;
+    }
 
-	public String getSeen(){
-		return seen;
-	}
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
-	@Override
- 	public String toString(){
-		return 
-			"DataItem{" + 
-			"attachment = '" + attachment + '\'' + 
-			",reply_id = '" + replyId + '\'' + 
-			",updated_at = '" + updatedAt + '\'' + 
-			",user_id = '" + userId + '\'' + 
-			",userapi = '" + userapi + '\'' + 
-			",conversation_id = '" + conversationId + '\'' + 
-			",created_at = '" + createdAt + '\'' + 
-			",_id = '" + id + '\'' + 
-			",type = '" + type + '\'' + 
-			",message = '" + message + '\'' + 
-			",seen = '" + seen + '\'' + 
-			"}";
-		}
+    public String getMessage() {
+        return message;
+    }
+
+    public void setSeen(String seen) {
+        this.seen = seen;
+    }
+
+    public String getSeen() {
+        return seen;
+    }
+
+    @Override
+    public String toString() {
+        return
+                "DataItem{" +
+                        "attachment = '" + attachment + '\'' +
+                        ",reply_id = '" + replyId + '\'' +
+                        ",updated_at = '" + updatedAt + '\'' +
+                        ",user_id = '" + userId + '\'' +
+                        ",userapi = '" + userapi + '\'' +
+                        ",conversation_id = '" + conversationId + '\'' +
+                        ",created_at = '" + createdAt + '\'' +
+                        ",_id = '" + id + '\'' +
+                        ",type = '" + type + '\'' +
+                        ",message = '" + message + '\'' +
+                        ",seen = '" + seen + '\'' +
+                        ",is_deleted = '" + is_deleted + '\'' +
+                        "}";
+    }
 }
